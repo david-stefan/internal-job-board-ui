@@ -13,8 +13,9 @@
 
 <body>
   <main v-if="jobPost" class="container is-max-desktop">
+    <img class="block image" src="logo.avif" width="220">
+    <a href="index.html">(View all jobs)</a>
     <h1 class="mb-0">{{ jobPost.title }}</h1>
-    <p>at gorjana <a href="index.html">(View all jobs)</a></p>
     <p class="subdued">{{ jobPost.location.name }}</p>
     <div id="job-post__content" v-html="jobPost.internal_content"></div>
     <div id="job-post__application">
@@ -73,7 +74,7 @@
             </div>
           </div>
         </div>
-        <button class="button is-info is-medium" type="submit">Submit Application</button>
+        <button class="button is-medium" type="submit">Submit Application</button>
       </form>
     </div>
 
