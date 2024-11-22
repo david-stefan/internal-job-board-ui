@@ -179,6 +179,10 @@ select {
   margin-left: auto;
 }
 
+.button {
+  --bulma-loading-color: white;
+}
+
 .subdued {
   color: var(--gray);
 }
