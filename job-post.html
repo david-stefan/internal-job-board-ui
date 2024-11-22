@@ -39,7 +39,7 @@
                     <input
                       type="file"
                       :name="question.name"
-                      :required="false"
+                      :required="question.required"
                       class="file-input"
                       accept=".pdf, .doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                     />
@@ -58,7 +58,7 @@
                   :type="getInputType(question.type, question.name)"
                   :multiple="question.type === 'multi_select'"
                   :name="question.name"
-                  :required="false"
+                  :required="question.required"
                   :class="getInputClass(question.type, question.name)"
                 >
                   <option
