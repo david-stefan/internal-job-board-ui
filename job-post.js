@@ -8,7 +8,7 @@
     BASE_URL: [
       LOCAL_BASE_URL,
       HEROKU_BASE_URL,
-    ][0],
+    ][1],
     inputTypes: {
       boolean: { tag: 'select', class: 'input' },
       long_text: { tag: 'textarea', class: 'textarea' },
