@@ -22,6 +22,9 @@
 }
 
 :root {
+  --bulma-arrow-color: black;
+  --bulma-body-color: black;
+  --bulma-link-text: black;
   --gray: #7a7676;
 }
 
@@ -41,6 +44,7 @@ h3 {
 h1 {
   font-family: 'Futura PT Heavy', sans-serif;
   letter-spacing: 0.05em;;
+  text-transform: uppercase;
 }
 
 h1,
@@ -60,6 +64,10 @@ h2,
 h3,
 .h3 {
   font-size: 1rem;
+}
+
+a:hover {
+  text-decoration: revert;
 }
 
 ul,
@@ -120,8 +128,8 @@ select {
   margin-top: 1rem;
 }
 
-#job-post__content p {
-  margin-bottom: var(--bulma-block-spacing);
+#job-post__content p:not(:last-child) {
+  margin-bottom: calc(var(--bulma-block-spacing) / 2);
 }
 
 #job-post__application {
