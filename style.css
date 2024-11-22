@@ -12,12 +12,17 @@ body {
 h1,
 h2,
 h3 {
+  line-height: 1.2;
   margin-bottom: 1em;
 }
 
 h1,
 .h1 {
-  font-size: 2.25rem;
+  font-size: 1.5rem;
+
+  @media screen and (min-width: 600px) {
+    font-size: 2.25rem;
+  }
 }
 
 h2,
@@ -38,6 +43,15 @@ li {
 
 ul {
   list-style: revert;
+}
+
+dialog {
+  max-width: 600px;
+}
+
+dialog footer {
+  display: flex;
+  justify-content: flex-end;;
 }
 
 .label {
@@ -120,6 +134,11 @@ select {
 
 #job-post__application .file-name {
   max-width: unset;
+}
+
+#job-post__application button[type="submit"] {
+  display: block;
+  margin-left: auto;
 }
 
 .subdued {

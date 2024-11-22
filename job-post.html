@@ -19,7 +19,7 @@
     <div id="job-post__content" v-html="jobPost.internal_content"></div>
     <div id="job-post__application">
       <h2>Apply for this Job</h2>
-      <form :action="$options.BASE_URL" method="POST" enctype="multipart/form-data">
+      <form :action="$options.BASE_URL" method="POST" enctype="multipart/form-data" @submit.prevent="handleSubmit">
         <input type="hidden" name="id" :value="jobPost.id">
         <div v-for="question in jobPost.questions" :key="question.name" class="field" :class="{
           'is-horizontal': !isCustomQuestion(question.name) && question.type !== 'attachment',
@@ -73,9 +73,23 @@
             </div>
           </div>
         </div>
-        <input class="button is-medium" type="submit" value="Submit Application" />
+        <button class="button is-info is-medium" type="submit">Submit Application</button>
       </form>
     </div>
+
+    <dialog ref="dialog">
+      <form method="dialog">
+        <header>
+          <h2>{{ dialog.title }}</h2>
+        </header>
+        <article class="block">
+          {{ dialog.body }}
+        </article>
+        <footer>
+          <button class="button">OK</button>
+        </footer>
+      </form>
+    </dialog>
   </main>
   <script src="job-post.js"></script>
 </body>

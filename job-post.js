@@ -18,6 +18,10 @@
     },
     data: {
       jobPost: null,
+      dialog: {
+        title: "",
+        body: "",
+      }
     },
     methods: {
       isCustomQuestion(name) {
@@ -36,6 +40,35 @@
       getInputClass(type) {
         return this.$options.inputTypes[type].class;
       },
+      showDialog(title, body, callback) {
+        this.dialog.title = title;
+        this.dialog.body = body;
+        if (callback) this.$refs.dialog.querySelector('button').addEventListener('click', callback);
+        this.$refs.dialog.showModal();
+      },
+      async handleSubmit(e) {
+        const form = e.target;
+        form.querySelector('[type="submit"]').classList.add('is-loading');
+
+        try {
+          const response = await fetch(form.action, {
+            method: form.method,
+            body: new FormData(form),
+          });
+          if (!response.ok) throw new Error(`Server error: ${response.status}`);
+          const result = await response.json();
+          console.log(result);
+          this.showDialog(
+            'Application Submitted Successfully!',
+            'Thank you for applying! Your application has been received and is now under review.',
+            () => window.location.href = '/',
+          );
+        } catch (error) {
+          console.error('Upload failed:', error);
+        } finally {
+          form.querySelector('[type="submit"]').classList.remove('is-loading');
+        }
+      }
     },
     async created() {
       const id = +(new URLSearchParams(window.location.search)).get('id');
