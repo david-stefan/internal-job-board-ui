@@ -181,14 +181,14 @@ select {
 }
 
 #job-post__application button[type="submit"] {
-  background-color: black;
-  color: white;
   display: block;
   margin-left: auto;
 }
 
 .button {
   --bulma-loading-color: white;
+  background-color: black;
+  color: white;
 }
 
 .subdued {
