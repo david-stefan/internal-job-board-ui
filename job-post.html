@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Job application at gorjana</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="David Štefan">
+  <link href="style.css" rel="stylesheet">
+  <!-- <link rel="icon" type="image/svg+xml" href="/favicon.svg"> -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+</head>
+
+<body>
+  <main v-if="jobPost" class="container is-max-desktop">
+    <h1 class="mb-0">{{ jobPost.title }}</h1>
+    <p>at gorjana <a href="/">(View all jobs)</a></p>
+    <p class="subdued">{{ jobPost.location.name }}</p>
+    <div id="job-post__content" v-html="jobPost.internal_content"></div>
+    <div id="job-post__application">
+      <h2>Apply for this Job</h2>
+      <form :action="$options.BASE_URL" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="id" :value="jobPost.id">
+        <div v-for="question in jobPost.questions" :key="question.name" class="field" :class="{
+          'is-horizontal': !isCustomQuestion(question.name) && question.type !== 'attachment',
+          custom: isCustomQuestion(question.name)
+        }">
+          <div :class="{'field-label is-normal': !isCustomQuestion(question.name) && question.type !== 'attachment' }">
+            <label class="label">{{ question.label }}<span>*</span></label>
+          </div>
+          <div class="field-body">
+            <div class="field" :class="{
+              select: ['boolean', 'single_select', 'multi_select'].includes(question.type),
+              'is-multiple': question.type === 'multi_select'
+            }">
+              <div class="control">
+                <div v-if="question.type === 'attachment'" class="file is-boxed has-name">
+                  <label class="file-label">
+                    <input
+                      type="file"
+                      :name="question.name"
+                      :required="false"
+                      class="file-input"
+                      accept=".pdf, .doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    />
+                    <span class="file-cta">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" class="mr-2">
+                        <path d="M11 10v2H5v-2H0v6h16v-6zm-7 4H2v-2h2z"/>
+                        <path d="M13 5 8 0 3 5h3v6h4V5z"/>
+                      </svg>
+                      <span class="file-label">Choose a file…</span>
+                    </span>
+                    <span class="file-name">No file uploaded</span>
+                  </label>
+                </div>
+                <component v-else
+                  :is="getInputTag(question.type)"
+                  :type="getInputType(question.type, question.name)"
+                  :multiple="question.type === 'multi_select'"
+                  :name="question.name"
+                  :required="false"
+                  :class="getInputClass(question.type, question.name)"
+                >
+                  <option
+                    v-if="['boolean', 'single_select', 'multi_select'].includes(question.type)"
+                    v-for="option in question.values"
+                    :value="option.value"
+                  >
+                    {{ option.label }}
+                  </option>
+                </component>
+              </div>
+            </div>
+          </div>
+        </div>
+        <input class="button is-medium" type="submit" value="Submit Application" />
+      </form>
+    </div>
+  </main>
+  <script src="job-post.js"></script>
+</body>
+
+</html>

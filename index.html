@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Jobs at gorjana</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="David Štefan">
+  <link href="style.css" rel="stylesheet">
+  <!-- <link rel="icon" type="image/svg+xml" href="/favicon.svg"> -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+</head>
+
+<body>
+  <main id="job-posts" class="container">
+    <div id="job-posts__filters" class="block">
+      <div class="field">
+        <label class="label">Department</label>
+        <div class="control">
+          <div class="select">
+            <select v-model="selectedDepartmentId">
+              <option value="0">All Departments</option>
+              <option v-for="department in departments" :key="department.id" :value="department.id">{{ department.name }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Office</label>
+        <div class="control">
+          <div class="select">
+            <select v-model="selectedOfficeId">
+              <option value="0">All Offices</option>
+              <option v-for="office in offices" :key="office.id" :value="office.id">{{ office.name }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p v-if="jobPosts.length" class="block">{{ jobPostsFiltered.length }} job{{ jobPostsFiltered.length !== 1 ? 's' : '' }}</p>
+
+    <div v-for="department in departments" class="block job-posts-per-department">
+      <h2 v-if="!+selectedDepartmentId" class="label">{{ department.name }}</h2>
+      <div class="block job-post" v-for="jobPost in jobPostsFiltered.filter(({ job: { departments } }) => departments.map(({ id }) => id).includes(department.id))" :key="jobPost.id">
+        <a :href="`/job-post?id=${jobPost.id}`">{{ jobPost.title }}</a>
+        <p>{{ jobPost.location.name }}</p>
+      </div>
+    </div>
+  </main>
+  <script src="index.js"></script>
+</body>
+
+</html>
