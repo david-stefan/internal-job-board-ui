@@ -19,7 +19,7 @@
     <p class="subdued">{{ jobPost.location.name }}</p>
     <div id="job-post__content" v-html="jobPost.internal_content"></div>
     <div id="job-post__application">
-      <h2>Apply for this Job</h2>
+      <h2 class="block">Apply for this Job</h2>
       <form :action="$options.BASE_URL" method="POST" enctype="multipart/form-data" @submit.prevent="handleSubmit">
         <input type="hidden" name="id" :value="jobPost.id">
         <div v-for="question in jobPost.questions" :key="question.name" class="field" :class="{

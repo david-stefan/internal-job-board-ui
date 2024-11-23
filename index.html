@@ -15,7 +15,7 @@
   <main id="job-posts" class="container is-max-desktop">
     <a href="https://gorjana.com" id="logo" class="block" target="_blank"><img class="image" src="logo.avif" width="120"></a>
     <h1>gorjana Internal Opportunities</h1>
-    <div class="block mb-6">
+    <div class="block">
       <p>At gorjana, we act with intention, exude passion for business and strive to be unique in all that we do. We presume trust in each other and make the commitment to measure by the standards of fairness.</p>
       <ul>
         <li>Intention | How We Act: honest, respectful, generous, thoughtful, purposeful</li>
@@ -29,25 +29,21 @@
     <div id="job-posts__filters" class="block">
       <div class="field">
         <label class="label">Department</label>
-        <div class="control">
-          <div class="select">
-            <select v-model="selectedDepartmentId">
-              <option value="0">All Departments</option>
-              <option v-for="department in departments" :key="department.id" :value="department.id">{{ department.name }}</option>
-            </select>
-          </div>
+        <div class="select">
+          <select v-model="selectedDepartmentId">
+            <option value="0">All Departments</option>
+            <option v-for="department in departments" :key="department.id" :value="department.id">{{ department.name }}</option>
+          </select>
         </div>
       </div>
 
       <div class="field">
         <label class="label">Office</label>
-        <div class="control">
-          <div class="select">
-            <select v-model="selectedOfficeId">
-              <option value="0">All Offices</option>
-              <option v-for="office in offices" :key="office.id" :value="office.id">{{ office.name }}</option>
-            </select>
-          </div>
+        <div class="select">
+          <select v-model="selectedOfficeId">
+            <option value="0">All Offices</option>
+            <option v-for="office in offices" :key="office.id" :value="office.id">{{ office.name }}</option>
+          </select>
         </div>
       </div>
     </div>
@@ -57,7 +53,7 @@
     <div v-for="department in departments" class="block job-posts-per-department">
       <h2 v-if="!+selectedDepartmentId" class="label">{{ department.name }}</h2>
       <div class="block job-post" v-for="jobPost in jobPostsFiltered.filter(({ job: { departments } }) => departments.map(({ id }) => id).includes(department.id))" :key="jobPost.id">
-        <a :href="`job-post?id=${jobPost.id}`">{{ jobPost.title }}</a>
+        <a :href="`job-post?id=${jobPost.id}`" class="job-post__title">{{ jobPost.title }}</a>
         <p class="subdued">{{ jobPost.location.name }}</p>
       </div>
     </div>
