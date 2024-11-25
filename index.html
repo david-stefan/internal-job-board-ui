@@ -53,7 +53,7 @@
     <div v-for="department in departments" class="block job-posts-per-department">
       <h2 v-if="!+selectedDepartmentId" class="label">{{ department.name }}</h2>
       <div class="block job-post" v-for="jobPost in jobPostsFiltered.filter(({ job: { departments } }) => departments.map(({ id }) => id).includes(department.id))" :key="jobPost.id">
-        <a :href="`job-post?id=${jobPost.id}`" class="job-post__title">{{ jobPost.title }}</a>
+        <a :href="`/job-post?id=${jobPost.id}`" class="job-post__title">{{ jobPost.title }}</a>
         <p class="subdued">{{ jobPost.location.name }}</p>
       </div>
     </div>
