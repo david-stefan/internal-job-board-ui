@@ -22,13 +22,37 @@
 }
 
 :root {
+  --color-black: black;
+  --color-desert-storm: #f5f5f4;
+  --color-ecru-white: #fbfaf5;
+  --color-gray: #7a7676;
+  --color-white: white;
+
   --bulma-arrow-color: black;
   --bulma-body-color: black;
   --bulma-link-text: black;
-  --gray: #7a7676;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-black: white;
+    --color-desert-storm: #1a1a1a;
+    --color-ecru-white: #04050a;
+    --color-gray: #858989;
+    --color-white: black;
+
+    --bulma-arrow-color: white;
+    --bulma-body-color: white;
+    --bulma-link-text: white;
+  }
+}
+
+html {
+  background-color: var(--color-white);
 }
 
 body {
+  color: var(--color-black);
   font-family: 'Futura PT Book', sans-serif;
   font-size: 16px;
   letter-spacing: 0.075em;
@@ -62,6 +86,10 @@ h3,
   font-size: 1rem;
 }
 
+a {
+  color: var(--color-black);
+}
+
 a:hover {
   text-decoration: revert;
 }
@@ -74,6 +102,15 @@ li {
 
 ul {
   list-style: revert;
+}
+
+label,
+label * {
+  color: var(--white) !important;
+}
+
+.label {
+  font-weight: revert;
 }
 
 select {
@@ -96,11 +133,6 @@ dialog footer {
 main.container {
   padding: clamp(1rem, 6vmin, 4rem);
 }
-
-.label {
-  font-weight: revert;
-}
-
 .button {
   --bulma-loading-color: white;
   background-color: black;
@@ -108,7 +140,7 @@ main.container {
 }
 
 .subdued {
-  color: var(--gray);
+  color: var(--color-gray);
 }
 
 /* -------------- */
@@ -130,7 +162,7 @@ main.container {
 }
 
 #job-posts .job-post:not(:last-child) {
-  border-bottom: 1px solid #f5f5f4;
+  border-bottom: 1px solid var(--color-desert-storm);
   padding-bottom: var(--bulma-block-spacing);
 }
 
@@ -151,7 +183,7 @@ main.container {
 }
 
 #job-post__application {
-  background-color: #fbfaf5;
+  background-color: var(--color-ecru-white);
   margin-top: 2rem;
   padding: 2rem;
 }
@@ -176,7 +208,7 @@ main.container {
 }
 
 #job-post__application .field:not(.custom)+.field.custom::before {
-  background-color: var(--gray);
+  background-color: var(--color-gray);
   content: "";
   display: block;
   height: 1px;
