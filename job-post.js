@@ -50,10 +50,13 @@
         const form = e.target;
         form.querySelector('[type="submit"]').classList.add('is-loading');
 
+        const formData = new FormData(form);
+        if (!formData.get('cover_letter').size) formData.delete('cover_letter');
+
         try {
           const response = await fetch(form.action, {
             method: form.method,
-            body: new FormData(form),
+            body: formData,
           });
           if (!response.ok) throw new Error(`Server error: ${response.status}`);
           const result = await response.json();
