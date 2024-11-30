@@ -1,6 +1,7 @@
 (() => {
   const LOCAL_BASE_URL = 'http://127.0.0.1:8080';
   const HEROKU_BASE_URL = 'https://internal-job-board-c77640affb70.herokuapp.com';
+  const CLOUD_RUN_BASE_URL = 'https://internal-job-board-http-function-1085083463883.us-central1.run.app';
   const FETCH_ERROR_MESSAGE = 'Failed to fetch data from Greenhouse API.';
 
   const app = new Vue({
@@ -8,7 +9,8 @@
     BASE_URL: [
       LOCAL_BASE_URL,
       HEROKU_BASE_URL,
-    ][1],
+      CLOUD_RUN_BASE_URL,
+    ][2],
     inputTypes: {
       boolean: { tag: 'select', class: 'input' },
       long_text: { tag: 'textarea', class: 'textarea' },
