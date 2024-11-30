@@ -58,6 +58,10 @@ body {
   letter-spacing: 0.075em;
 }
 
+body[v-if] {
+  visibility: hidden;
+}
+
 h1,
 h2,
 h3 {
