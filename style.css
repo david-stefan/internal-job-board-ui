@@ -1,23 +1,23 @@
-@import "https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css";
+@import 'https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css';
 
 @font-face {
   font-family: 'Futura PT Heavy';
   src: url('Futura PT Heavy.ttf') format('truetype');
-  font-weight: normal;
+  font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Futura PT Book';
   src: url('Futura PT Book.ttf') format('truetype');
-  font-weight: normal;
+  font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Freight Big Medium';
   src: url('Freight Big Medium.ttf') format('truetype');
-  font-weight: normal;
+  font-weight: 400;
   font-style: normal;
 }
 
@@ -27,7 +27,6 @@
   --color-ecru-white: #fbfaf5;
   --color-gray: #7a7676;
   --color-white: white;
-
   --bulma-arrow-color: black;
   --bulma-body-color: black;
   --bulma-link-text: black;
@@ -40,7 +39,6 @@
     --color-ecru-white: #04050a;
     --color-gray: #858989;
     --color-white: black;
-
     --bulma-arrow-color: white;
     --bulma-body-color: white;
     --bulma-link-text: white;
@@ -58,7 +56,8 @@ body {
   letter-spacing: 0.075em;
 }
 
-body[v-if] {
+body[v-if],
+body[hidden] {
   visibility: hidden;
 }
 
@@ -71,7 +70,7 @@ h3 {
 
 h1 {
   font-family: 'Futura PT Heavy', sans-serif;
-  letter-spacing: 0.05em;;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
@@ -127,7 +126,7 @@ dialog {
 
 dialog footer {
   display: flex;
-  justify-content: flex-end;;
+  justify-content: flex-end;
 }
 
 #logo {
@@ -196,14 +195,14 @@ main.container {
   margin-bottom: var(--bulma-label-spacing);
 }
 
-#job-post__application .label>span {
+#job-post__application .label > span {
   font-size: larger;
-  font-weight: bold;
+  font-weight: 700;
   margin-right: -4px;
   padding-left: 4px;
 }
 
-#job-post__application .field:not(:has([required])) .label>span {
+#job-post__application .field:not(:has([required])) .label > span {
   visibility: hidden;
 }
 
@@ -238,8 +237,27 @@ main.container {
   display: block;
   margin-left: auto;
 }
+
 @media print, screen and (min-width: 769px) {
   #job-post__application .field-body {
     flex-grow: 3.5;
   }
+}
+
+/* ------------- */
+/* Iframe styles */
+/* ------------- */
+
+body.is-in-iframe img[alt='Banner'],
+body.is-in-iframe #logo,
+body.is-in-iframe #back {
+  display: none;
+}
+
+body.is-in-iframe {
+  letter-spacing: unset;
+}
+
+body.is-in-iframe main {
+  padding: unset;
 }

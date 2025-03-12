@@ -18,11 +18,12 @@
       short_text: { tag: 'input', type: 'text', class: 'input' },
       single_select: { tag: 'select', class: 'input' },
     },
+    isInIframe: window.self !== window.top,
     data: {
       jobPost: null,
       dialog: {
-        title: "",
-        body: "",
+        title: '',
+        body: '',
       }
     },
     methods: {
@@ -66,7 +67,10 @@
           this.showDialog(
             'Application Submitted Successfully!',
             'Thank you for applying! Your application has been received and is now under review.',
-            () => window.location.href = '/',
+            () => {
+              if (this.$options.isInIframe) window.parent.postMessage({ name: 'redirect' }, '*');
+              else window.location.href = '/';
+            }
           );
         } catch (error) {
           console.error('Upload failed:', error);
@@ -88,18 +92,39 @@
       this.jobPost = jobPost;
     },
     mounted() {
-      try {
-        this.$el.querySelectorAll('input[type="file"').forEach((fileInput) => {
-          fileInput.addEventListener('change', (e) => {
-            if (fileInput.files.length > 0) {
-              const fileName = e.target.parentElement.querySelector('.file-name');
-              fileName.textContent = fileInput.files[0].name;
-            }
-          })
-        });
-      } catch (error) {
-        //
-      }
+      document.body.classList.toggle('is-in-iframe', this.$options.isInIframe);
+      document.body.removeAttribute('hidden');
+
+      const mutationObserver = new MutationObserver(async () => {
+        await this.$nextTick();
+        try {
+          window.parent.postMessage({ name: 'height', value: document.querySelector('main').scrollHeight }, '*');
+        } catch {}
+      });
+      mutationObserver.observe(document.documentElement, { attributes: true, childList: true, subtree: true });
+
+      const resizeObserver = new ResizeObserver(async () => {
+        await this.$nextTick();
+        try {
+          window.parent.postMessage({ name: 'height', value: document.querySelector('main').scrollHeight }, '*');
+        } catch {}
+      });
+      resizeObserver.observe(document.documentElement);
+
+      setTimeout(() => {
+        try {
+          this.$el.querySelectorAll('input[type="file"]').forEach((fileInput) => {
+            fileInput.addEventListener('change', (e) => {
+              if (fileInput.files.length > 0) {
+                const fileName = e.target.parentElement.querySelector('.file-name');
+                fileName.textContent = fileInput.files[0].name;
+              }
+            })
+          });
+        } catch (error) {
+          //
+        }
+      }, 3000); // Safe magic number until I think of something better
     }
   });
 })();
