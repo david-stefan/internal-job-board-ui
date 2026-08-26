@@ -4,15 +4,10 @@
   const CLOUD_RUN_BASE_URL = 'https://internal-job-board-http-function-1085083463883.us-central1.run.app';
   const FETCH_ERROR_MESSAGE = 'Failed to fetch data from Greenhouse API.';
 
-  function uniqById(array) {
-    const seen = new Map();
-    return array.reduce((unique, item) => {
-      if (!seen.has(item.id)) {
-        seen.set(item.id, true);
-        unique.push(item);
-      }
-      return unique;
-    }, []);
+  function getDepartments(jobDepartments, jobPosts) {
+    return jobDepartments.filter(({ id }) =>
+      jobPosts.map(({ job: { department_id } }) => department_id).includes(id),
+    );
   }
 
   const app = new Vue({
@@ -22,45 +17,71 @@
       HEROKU_BASE_URL,
       CLOUD_RUN_BASE_URL,
     ][2],
-    data: {
-      jobPosts: JSON.parse(sessionStorage.getItem('jobPosts')) ?? [],
-      departments: [],
-      selectedDepartmentId: 0,
-      offices: [],
-      selectedOfficeId: 0,
+    data() {
+      return {
+        jobPosts: JSON.parse(sessionStorage.getItem('jobPosts')) ?? [],
+        jobDepartments: JSON.parse(sessionStorage.getItem('jobDepartments')) ?? [],
+        departments: [],
+        selectedDepartmentId: 0,
+      };
     },
     computed: {
       jobPostsFiltered() {
-        let jobPosts = this.jobPosts;
-        jobPosts = jobPosts.filter(({ job: { departments } }) => departments.some(({ id }) => [id, 0].includes(+this.selectedDepartmentId)));
-        jobPosts = jobPosts.filter(({ job: { offices } }) => offices.some(({ id }) => [id, 0].includes(+this.selectedOfficeId)));
+        let { jobPosts } = this;
+        try {
+          jobPosts = jobPosts.filter(({ job: { department_id: departmentId } }) => [departmentId, 0].includes(+this.selectedDepartmentId));
+        } catch {
+          // `jobPosts` not initialized yet
+          // TypeError: Cannot read properties of undefined (reading 'department_id')
+        }
         return jobPosts;
+      },
+      jobPostsFilteredPerDepartment() {
+        const res = Object.fromEntries(
+          this.departments
+            .map((department) => [
+              department.name,
+              this.jobPostsFiltered.filter(({ job: { department_id } }) => department_id === department.id),
+            ])
+            .filter(([, jobPosts]) => jobPosts.length),
+        );
+        return res;
       },
     },
     async created() {
+      let response;
+
       if (!this.jobPosts.length) {
-        let jobPosts;
-        const response = await fetch(this.$options.BASE_URL);
+        response = await fetch(`${this.$options.BASE_URL}/job_posts`);
         if (!response.ok) throw new Error(FETCH_ERROR_MESSAGE);
-        jobPosts = await response.json();
+        const jobPosts = await response.json();
 
-        const jobs = await Promise.all(jobPosts.map(async ({ job_id }) => {
-          const response = await fetch(`${this.$options.BASE_URL}/job?id=${job_id}`);
-          if (!response.ok) throw new Error(FETCH_ERROR_MESSAGE);
-          return response.json();
-        }));
+        response = await fetch(`${this.$options.BASE_URL}/jobs`);
+        if (!response.ok) throw new Error(FETCH_ERROR_MESSAGE);
+        const jobs = await response.json();
 
-        jobPosts = jobPosts.map((jobPost, index) => ({
-          ...jobPost,
-          job: jobs[index],
-        }));
+        response = await fetch(`${this.$options.BASE_URL}/locations`);
+        if (!response.ok) throw new Error(FETCH_ERROR_MESSAGE);
+        const locations = await response.json();
 
-        sessionStorage.setItem('jobPosts', JSON.stringify(jobPosts));
+        jobPosts.forEach((jobPost) => {
+          jobPost.job = jobs.find(({ id }) => id === jobPost.job_id);
+          jobPost.location = locations.find(({ job_post_id: jobPostId }) => jobPostId === jobPost.id);
+        });
+
         this.jobPosts = jobPosts;
+        sessionStorage.setItem('jobPosts', JSON.stringify(this.jobPosts));
       }
 
-      this.departments = uniqById(this.jobPosts.map(({ job: { departments } }) => departments.map(({ id, name }) => ({ id, name }))).flat());
-      this.offices = uniqById(this.jobPosts.map(({ job: { offices } }) => offices.map(({ id, name }) => ({ id, name }))).flat());
+      if (!this.jobDepartments.length) {
+        response = await fetch(`${this.$options.BASE_URL}/departments`);
+        if (!response.ok) throw new Error(FETCH_ERROR_MESSAGE);
+        this.jobDepartments = await response.json();
+
+        sessionStorage.setItem('jobDepartments', JSON.stringify(this.jobDepartments));
+      }
+
+      this.departments = getDepartments(this.jobDepartments, this.jobPosts);
     },
   });
 })();

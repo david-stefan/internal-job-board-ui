@@ -156,16 +156,28 @@ main.container {
   flex-wrap: wrap;
 }
 
-#job-posts .job-posts-per-department:not(:last-child) {
-  padding-bottom: var(--bulma-block-spacing);
+#job-posts .job-posts-per-department {
+  background-color: var(--color-ecru-white);
+  border: 1px solid var(--color-gray);
+  border-radius: 1em;
+  padding: var(--bulma-block-spacing);
 }
 
 #job-posts .job-posts-per-department:not(:has(.job-post)) {
   display: none;
 }
 
+#job-posts .job-posts-per-department > h2 {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-gray);
+  border-radius: 4px;
+  display: inline-block;
+  margin-block-end: 1em;
+  padding: 0.25em;
+}
+
 #job-posts .job-post:not(:last-child) {
-  border-bottom: 1px solid var(--color-desert-storm);
+  border-bottom: 1px solid var(--color-gray);
   padding-bottom: var(--bulma-block-spacing);
 }
 

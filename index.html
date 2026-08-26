@@ -25,54 +25,61 @@
     alt="Banner"
   >
   <main id="job-posts" class="container is-max-desktop">
-    <a href="https://gorjana.com" id="logo" class="block" target="_blank"><img class="image" src="logo.avif" width="120"></a>
+    <a href="https://gorjana.com" id="logo" class="block" target="_blank" rel="noopener">
+      <img src="logo.avif" alt="gorjana Logo" class="image" width="120">
+    </a>
     <h1 class="mb-5">gorjana Internal Opportunities</h1>
     <div class="block">
       <h2>Philosophy</h2>
-      <p>At gorjana, we prioritize a culture rich in development and career opportunity. Internal pathways are imperative to the continued success of our growing brand.
-        Our goal is simple: prioritize filling open roles with <em><strong>internal candidates prior to searching for external talent</strong></em>.
+      <p>At gorjana, we prioritize a culture rich in development and career opportunity. Internal pathways are
+        imperative to the continued success of our growing brand.
+        Our goal is simple: prioritize filling open roles with <em><strong>internal candidates prior to searching for
+        external talent</strong></em>.
       </p>
     </div>
     <div class="block">
       <h2>Purpose</h2>
-      <p> We are here to chat through your career goals; whether they be to explore opportunities in a different department or pursue a progression to leadership, we look forward to connecting with you!</p>
+      <p>We are here to chat through your career goals; whether they be to explore opportunities in a different
+        department or pursue a progression to leadership, we look forward to connecting with you!</p>
     </div>
     <div class="block">
       <h2>Action</h2>
-      <p>Understanding how you want to grow your career is important to us. The first step is to express interest in internal opportunities by applying to the available positions below that align with your aspirations. Please be sure to answer all application questions thoroughly for timely application processing.</p>
+      <p>Understanding how you want to grow your career is important to us. The first step is to express interest in
+        internal opportunities by applying to the available positions below that align with your aspirations. Please be
+        sure to answer all application questions thoroughly for timely application processing.</p>
     </div>
     <div class="block">
-      <small>If you have interest in an area that is not on this list, please check back periodically as we update this board as new opportunities become available. While we may not have an opening in your desired area right now, there could be an opportunity in the future.</small>
+      <small>If you have interest in an area that is not on this list, please check back periodically as we update this
+        board as new opportunities become available. While we may not have an opening in your desired area right now,
+        there could be an opportunity in the future.</small>
     </div>
     <div id="job-posts__filters" class="block">
       <div class="field">
         <label class="label">Department</label>
         <div class="select">
-          <select v-model="selectedDepartmentId">
+          <select v-model="selectedDepartmentId" title="Select department">
             <option value="0">All Departments</option>
-            <option v-for="department in departments" :key="department.id" :value="department.id">{{ department.name }}</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="field">
-        <label class="label">Office</label>
-        <div class="select">
-          <select v-model="selectedOfficeId">
-            <option value="0">All Offices</option>
-            <option v-for="office in offices" :key="office.id" :value="office.id">{{ office.name }}</option>
+            <option v-for="department in departments" :key="department.id" :value="department.id">{{ department.name }}
+            </option>
           </select>
         </div>
       </div>
     </div>
 
-    <p v-if="jobPosts.length" class="block">{{ jobPostsFiltered.length }} job{{ jobPostsFiltered.length !== 1 ? 's' : '' }}</p>
+    <p v-if="jobPosts.length" class="block">
+      {{ jobPostsFiltered.length }} job{{ jobPostsFiltered.length !== 1 ? 's' : '' }}
+    </p>
+    <p v-else>Loading...</p>
 
-    <div v-for="department in departments" class="block job-posts-per-department">
-      <h2 v-if="!+selectedDepartmentId" class="label">{{ department.name }}</h2>
-      <div class="block job-post" v-for="jobPost in jobPostsFiltered.filter(({ job: { departments } }) => departments.map(({ id }) => id).includes(department.id))" :key="jobPost.id">
-        <a :href="`/job-post?id=${jobPost.id}`" class="job-post__title">{{ jobPost.title }}</a>
-        <p class="subdued">{{ jobPost.location.name }}</p>
+    <div v-for="departmentName in Object.keys(jobPostsFilteredPerDepartment)" class="block job-posts-per-department">
+      <h2>{{ departmentName }}</h2>
+      <div v-for="jobPost in jobPostsFilteredPerDepartment[departmentName]" :key="jobPost.id" class="block job-post">
+        <div>
+          <a :href="`/job-post?id=${jobPost.id}`" class="job-post__title">
+            {{ jobPost.title }}
+          </a>
+          <p class="subdued">{{ jobPost.location.plain_text_location }}</p>
+        </div>
       </div>
     </div>
   </main>

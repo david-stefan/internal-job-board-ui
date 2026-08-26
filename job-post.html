@@ -38,19 +38,19 @@
         <input type="hidden" name="is-internal" :value="Number(!$options.isInIframe)">
         <input type="hidden" name="id" :value="jobPost.id">
         <div v-for="question in jobPost.questions" :key="question.name" class="field" :class="{
-          'is-horizontal': !isCustomQuestion(question.name) && question.type !== 'attachment',
+          'is-horizontal': !isCustomQuestion(question.name) && question.answer_type !== 'attachment',
           custom: isCustomQuestion(question.name)
         }">
-          <div :class="{'field-label is-normal': !isCustomQuestion(question.name) && question.type !== 'attachment' }">
+          <div :class="{'field-label is-normal': !isCustomQuestion(question.name) && question.answer_type !== 'attachment' }">
             <label class="label">{{ question.label }}<span>*</span></label>
           </div>
           <div class="field-body">
             <div class="field" :class="{
-              select: ['boolean', 'single_select', 'multi_select'].includes(question.type),
-              'is-multiple': question.type === 'multi_select'
+              select: ['boolean', 'single_select', 'multi_select'].includes(question.answer_type),
+              'is-multiple': question.answer_type === 'multi_select'
             }">
               <div class="control">
-                <div v-if="question.type === 'attachment'" class="file is-boxed has-name">
+                <div v-if="question.answer_type === 'attachment'" class="file is-boxed has-name">
                   <label class="file-label">
                     <input
                       type="file"
@@ -70,15 +70,15 @@
                   </label>
                 </div>
                 <component v-else
-                  :is="getInputTag(question.type)"
-                  :type="getInputType(question.type, question.name)"
-                  :multiple="question.type === 'multi_select'"
+                  :is="getInputTag(question.answer_type)"
+                  :type="getInputType(question.answer_type, question.name)"
+                  :multiple="question.answer_type === 'multi_select'"
                   :name="question.name"
                   :required="question.required"
-                  :class="getInputClass(question.type, question.name)"
+                  :class="getInputClass(question.answer_type, question.name)"
                 >
                   <option
-                    v-if="['boolean', 'single_select', 'multi_select'].includes(question.type)"
+                    v-if="['boolean', 'single_select', 'multi_select'].includes(question.answer_type)"
                     v-for="option in question.values"
                     :value="option.value"
                   >
