@@ -84,9 +84,17 @@
       let jobPost = JSON.parse(sessionStorage.getItem('jobPosts'))?.find((jobPost) => jobPost.id === id);
 
       if (!jobPost) {
-        const response = await fetch(`${this.$options.BASE_URL}/job_post?id=${id}`);
+        let response;
+
+        response = await fetch(`${this.$options.BASE_URL}/job_post?id=${id}`);
         if (!response.ok) throw new Error(FETCH_ERROR_MESSAGE);
         jobPost = await response.json();
+
+        response = await fetch(`${this.$options.BASE_URL}/location?job_post_id=${jobPost.id}`);
+        if (!response.ok) throw new Error(FETCH_ERROR_MESSAGE);
+        const location = await response.json();
+
+        jobPost.location = { name: location.plain_text_location };
       }
 
       this.jobPost = jobPost;
@@ -99,7 +107,7 @@
         await this.$nextTick();
         try {
           window.parent.postMessage({ name: 'height', value: document.querySelector('main').scrollHeight }, '*');
-        } catch {}
+        } catch { }
       });
       mutationObserver.observe(document.documentElement, { attributes: true, childList: true, subtree: true });
 
@@ -107,7 +115,7 @@
         await this.$nextTick();
         try {
           window.parent.postMessage({ name: 'height', value: document.querySelector('main').scrollHeight }, '*');
-        } catch {}
+        } catch { }
       });
       resizeObserver.observe(document.documentElement);
 
