@@ -77,13 +77,14 @@
                   :required="question.required"
                   :class="getInputClass(question.answer_type, question.name)"
                 >
-                  <option
-                    v-if="['boolean', 'single_select', 'multi_select'].includes(question.answer_type)"
-                    v-for="option in question.values"
-                    :value="option.value"
-                  >
-                    {{ option.label }}
-                  </option>
+                  <template v-if="['boolean', 'single_select', 'multi_select'].includes(question.answer_type)">
+                    <option
+                      v-for="option in (question.answer_type === 'boolean' ? [{ label: 'No' }, { label: 'Yes' }] : question.options)"
+                      :value="option.label"
+                    >
+                      {{ option.label }}
+                    </option>
+                  </template>
                 </component>
               </div>
             </div>
