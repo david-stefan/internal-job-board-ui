@@ -97,6 +97,12 @@
         jobPost.location = { name: location.plain_text_location };
       }
 
+      try {
+        jobPost.questions.find(({ name }) => name === 'phone_number').name = 'phone';
+      } catch {
+        // no phone number field
+      }
+
       this.jobPost = jobPost;
     },
     mounted() {
